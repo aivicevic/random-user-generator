@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Random User Generator</string>
+
+    <string name="home">Home</string>
+    <string name="fetch_user">Fetch User</string>
+    <string name="fetch_user_list">Fetch User List</string>
+
+    <!-- User Detail/List -->
+    <string name="user_list">User List</string>
+    <string name="load_users_error">Unable to retrieve users. Please check network connection.</string>
+    <string name="user_picture_desc">User Profile Pic</string>
+    <string formatted="false" name="user_full_name">%s %s</string>
+    <string formatted="false" name="user_full_name_title">%s. %s %s</string>
+    <string formatted="false" name="user_city_state">%s, %s</string>
+    <string formatted="false" name="user_full_address">%s, %s, %s %s</string>
+    <string formatted="false" name="user_age">Age: %s</string>
+    <string formatted="false" name="user_email">Email: %s</string>
+    <string formatted="false" name="user_home_phone">Home: %s</string>
+    <string formatted="false" name="user_mobile_phone">Mobile: %s</string>
+</resources>

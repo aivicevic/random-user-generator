@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="home_button_width">180dp</dimen>
+    <dimen name="user_picture_thumbnail">56dp</dimen>
+    <dimen name="user_picture_full">224dp</dimen>
+
+    <!-- Spacing -->
+    <dimen name="small_spacing">4dp</dimen>
+    <dimen name="standard_spacing">8dp</dimen>
+    <dimen name="large_spacing">16dp</dimen>
+
+    <!-- Font Sizes -->
+    <dimen name="font_12">12sp</dimen>
+    <dimen name="font_14">14sp</dimen>
+    <dimen name="font_16">16sp</dimen>
+    <dimen name="font_24">24sp</dimen>
+</resources>
