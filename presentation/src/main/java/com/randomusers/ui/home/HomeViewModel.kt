@@ -1,7 +1,6 @@
 package com.randomusers.ui.home
 
 import android.content.Context
-import android.content.Intent
 import com.randomusers.common.BaseViewModel
 import com.randomusers.ui.userlist.UserListActivity
 import javax.inject.Inject
@@ -12,7 +11,7 @@ class HomeViewModel @Inject constructor() : BaseViewModel() {
         // Directly to user info activity
     }
 
-    fun fetchUsers(context: Context) {
-        context.startActivity(Intent(context, UserListActivity::class.java))
+    fun fetchUserList(context: Context, isFavoritesList: Boolean) {
+        context.startActivity(UserListActivity.getStartingIntent(context, isFavoritesList))
     }
 }

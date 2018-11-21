@@ -14,6 +14,7 @@ class UserListViewModel @Inject constructor(
 ) : BaseViewModel() {
 
     val stateLiveData = MutableLiveData<UserListState>()
+    var isFavoritesList = false
 
     init {
         stateLiveData.value = UserListState(UserListStateType.DEFAULT, emptyList())
@@ -30,8 +31,10 @@ class UserListViewModel @Inject constructor(
     }
 
     fun resetUserList() {
-        userRepository.removeUsersFromDb()
         stateLiveData.value = UserListState(UserListStateType.LOADING, emptyList())
+        if (!isFavoritesList) {
+            userRepository.deleteNonFavoritesFromDb()
+        }
         updateUserList()
     }
 
@@ -39,8 +42,16 @@ class UserListViewModel @Inject constructor(
         stateLiveData.value = UserListState(UserListStateType.DEFAULT, obtainCurrentData())
     }
 
+    fun toggleFavorite(user: User) {
+        userRepository.updateFavoriteInDb(user.also { it.isFavorite = !it.isFavorite })
+        if (isFavoritesList) {
+            resetUserList()
+        }
+    }
+
     private fun getUserList() {
-        addDisposable(userRepository.getUsers(100)
+        val observable = if (isFavoritesList) userRepository.getFavoritesFromDb() else userRepository.getUsers(100)
+        addDisposable(observable
             .compose(applySchedulersSingle(schedulerProvider))
             .doOnSubscribe { onLoadUserList() }
             .subscribe(
@@ -57,13 +68,16 @@ class UserListViewModel @Inject constructor(
     private fun onRetrieveUserListSuccess(users: List<User>) {
         val userList = obtainCurrentData().toMutableList()
         userList.addAll(users)
-        userRepository.saveUsersToDb(userList)
         stateLiveData.value = UserListState(UserListStateType.DEFAULT, userList)
+        if (!isFavoritesList) {
+            userRepository.saveUsersToDb(users)
+        }
     }
 
     private fun onRetrieveUserListError() {
         stateLiveData.value = UserListState(UserListStateType.ERROR, obtainCurrentData(), R.string.load_users_error)
     }
 
+    // TODO: Refactor this and add pagination
     private fun obtainCurrentData() = stateLiveData.value?.data ?: emptyList()
 }

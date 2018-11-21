@@ -34,7 +34,12 @@ class HomeActivity : BaseActivity() {
         }
 
         fetchUsersButton.setOnClickListener {
-            homeViewModel.fetchUsers(this)
+            homeViewModel.fetchUserList(this, false)
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+        }
+
+        favoritesButton.setOnClickListener {
+            homeViewModel.fetchUserList(this, true)
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
         }
     }

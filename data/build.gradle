@@ -46,6 +46,7 @@ dependencies {
 
     // Room
     implementation room.runtime
+    implementation room.rxJava
     kapt room.compiler
 
     // Testing

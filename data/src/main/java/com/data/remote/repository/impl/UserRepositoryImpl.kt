@@ -20,13 +20,35 @@ class UserRepositoryImpl @Inject constructor(
     override fun getUsers(results: Int): Single<List<User>> =
         userService.getUsers(results).map { users -> users.results }
 
-    override fun saveUsersToDb(users: List<User>) {
-        ioThread { dbInstance.usersDao().insertAll(users) }
+    override fun saveUserToDB(user: User) {
+        ioThread { dbInstance.usersDao().insertUser(user) }
     }
 
-    override fun getUsersFromDb(): List<User> = dbInstance.usersDao().all
+    override fun saveUsersToDb(users: List<User>) {
+        ioThread { dbInstance.usersDao().insertUsers(users) }
+    }
 
-    override fun removeUsersFromDb() {
+    override fun updateFavoriteInDb(user: User) {
+        ioThread { dbInstance.usersDao().updateFavoriteUser(user) }
+    }
+
+    override fun getUserFromDb(user: User) {
+        dbInstance.usersDao().getUserById(user.id.value)
+    }
+
+    override fun getFavoritesFromDb(): Single<List<User>> = dbInstance.usersDao().getFavorites()
+
+    override fun getAllUsersFromDb(): List<User> = dbInstance.usersDao().getAllUsers()
+
+    override fun deleteUserFromDb(user: User) {
+        ioThread { dbInstance.usersDao().deleteUserById(user.id.value) }
+    }
+
+    override fun deleteNonFavoritesFromDb() {
+        ioThread { dbInstance.usersDao().deleteNonFavorites() }
+    }
+
+    override fun deleteAllUsersFromDb() {
         ioThread { dbInstance.usersDao().deleteAll() }
     }
 }

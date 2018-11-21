@@ -1,19 +1,48 @@
 package com.data.local.db.dao
 
-import android.arch.persistence.room.Dao
-import android.arch.persistence.room.Insert
-import android.arch.persistence.room.Query
+import android.arch.persistence.room.*
 import com.domain.model.user.User
+import io.reactivex.Single
 
-// TODO: Determine how to structure Dao since Users object is retarded
+/*
+ * TODO: Add documentation
+ */
 @Dao
 interface UsersDao {
-    @get:Query("SELECT * FROM user")
-    val all: List<User>
 
     @Insert
-    fun insertAll(users: List<User>)
+    @Transaction
+    fun insertUser(user: User)
+
+    @Insert
+    @Transaction
+    fun insertUsers(users: List<User>)
+
+    @Update
+    @Transaction
+    fun updateFavoriteUser(user: User)
+
+    @Query("SELECT * FROM user WHERE user.value = :userId")
+    @Transaction
+    fun getUserById(userId: String): User
+
+    @Query("SELECT * FROM user WHERE user.isFavorite = 1")
+    @Transaction
+    fun getFavorites(): Single<List<User>>
+
+    @Query("SELECT * FROM user")
+    @Transaction
+    fun getAllUsers(): List<User>
+
+    @Query("DELETE FROM user WHERE user.value = :userId")
+    @Transaction
+    fun deleteUserById(userId: String)
+
+    @Query("DELETE FROM user WHERE user.isFavorite = 0")
+    @Transaction
+    fun deleteNonFavorites()
 
     @Query("DELETE FROM user")
+    @Transaction
     fun deleteAll()
 }

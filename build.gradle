@@ -76,6 +76,7 @@ ext {
               rxAndroid: "io.reactivex.rxjava2:rxandroid:$rxAndroidVersion"]
 
     room = [runtime : "android.arch.persistence.room:runtime:$roomVersion",
+            rxJava  : "android.arch.persistence.room:rxjava2:$roomVersion",
             compiler: "android.arch.persistence.room:compiler:$roomVersion"]
 
     retrofit = [retrofit      : "com.squareup.retrofit2:retrofit:$retrofitVersion",

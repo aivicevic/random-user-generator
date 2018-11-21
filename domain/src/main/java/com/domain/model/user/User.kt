@@ -14,6 +14,7 @@ import android.arch.persistence.room.PrimaryKey
  * @property dob the nested dob object of the user
  * @property phone the home phone number of the user
  * @property cell the cell phone number of the user
+ * @property isFavorite flag to determine if user has been saved to favorites
  */
 @Entity
 data class User(
@@ -24,5 +25,6 @@ data class User(
     @Embedded val dob: UserDob,
     val phone: String,
     val cell: String,
-    @Embedded val picture: UserPicture
+    @Embedded val picture: UserPicture,
+    var isFavorite: Boolean = false
 )

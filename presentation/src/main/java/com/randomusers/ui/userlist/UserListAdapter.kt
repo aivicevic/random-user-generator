@@ -7,9 +7,11 @@ import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import com.domain.model.user.User
 import com.randomusers.R
+import com.randomusers.ui.util.StringUtil
 import kotlinx.android.synthetic.main.item_user.view.*
 
-class UserListAdapter : RecyclerView.Adapter<UserListAdapter.ViewHolder>() {
+class UserListAdapter(private val userListListener: UserListListener) :
+    RecyclerView.Adapter<UserListAdapter.ViewHolder>() {
 
     private lateinit var userList: List<User>
 
@@ -18,7 +20,7 @@ class UserListAdapter : RecyclerView.Adapter<UserListAdapter.ViewHolder>() {
 
     override fun getItemCount(): Int = if (::userList.isInitialized) userList.size else 0
 
-    override fun onBindViewHolder(vh: ViewHolder, position: Int) = vh.bind(userList[position])
+    override fun onBindViewHolder(vh: ViewHolder, position: Int) = vh.bind(userList[position], userListListener)
 
     fun updateUserList(userList: List<User>) {
         this.userList = userList
@@ -34,19 +36,34 @@ class UserListAdapter : RecyclerView.Adapter<UserListAdapter.ViewHolder>() {
         private val mobilePhone = view.userMobilePhone
         private val favoriteIcon = view.favoriteIcon
 
-        fun bind(user: User) {
+        fun bind(user: User, userListListener: UserListListener) {
             Glide.with(context).load(user.picture.thumbnail).into(thumbnail)
-            name.text = context.getString(R.string.user_full_name,
-                user.name.first.capitalize(), user.name.last.capitalize())
-            address.text = context.getString(R.string.user_city_state,
-                user.location.city.capitalize(), user.location.state.capitalize())
+            name.text = context.getString(
+                R.string.user_full_name,
+                StringUtil.capitalizeWords(user.name.first),
+                StringUtil.capitalizeWords(user.name.last)
+            )
+            address.text = context.getString(
+                R.string.user_city_state,
+                StringUtil.capitalizeWords(user.location.city),
+                StringUtil.capitalizeWords(user.location.state)
+            )
             email.text = context.getString(R.string.user_email, user.email)
             mobilePhone.text = context.getString(R.string.user_mobile_phone, user.cell)
-            favoriteIcon.setOnClickListener { saveFavorite() }
+            favoriteIcon.setOnClickListener {
+                setFavoriteIcon(!user.isFavorite)
+                userListListener.toggleFavorite(user)
+            }
+            setFavoriteIcon(user.isFavorite)
         }
 
-        private fun saveFavorite() {
-
+        // TODO: Determine how to handle this better...?
+        private fun setFavoriteIcon(isFavorite: Boolean) {
+            if (isFavorite) {
+                favoriteIcon.setImageResource(R.drawable.icon_favorite_selected)
+            } else {
+                favoriteIcon.setImageResource(R.drawable.icon_favorite)
+            }
         }
     }
 }

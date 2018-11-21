@@ -25,8 +25,20 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/standard_spacing"
         android:text="@string/fetch_user_list"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/favoritesButton"
         app:layout_constraintTop_toBottomOf="@+id/fetchUserButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        style="@style/standard_button"/>
+
+    <Button
+        android:id="@+id/favoritesButton"
+        android:layout_width="@dimen/home_button_width"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/standard_spacing"
+        android:text="@string/favorites"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fetchUsersButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         style="@style/standard_button"/>
