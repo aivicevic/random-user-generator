@@ -6,12 +6,14 @@ import dagger.Component
 import dagger.android.support.AndroidSupportInjectionModule
 import javax.inject.Singleton
 
+// TODO: Clean up DI components (more modular)
 @Singleton
 @Component(
     modules = [
         AndroidSupportInjectionModule::class,
-        AppModule::class,
         ActivityBindingModule::class,
+        FragmentBindingModule::class,
+        AppModule::class,
         DatabaseModule::class,
         NetworkModule::class,
         RepositoryModule::class,
@@ -19,5 +21,6 @@ import javax.inject.Singleton
         ViewModelModule::class]
 )
 interface AppComponent {
+
     fun inject(application: RandomUsersApplication)
 }

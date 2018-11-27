@@ -23,11 +23,7 @@ class HomeActivity : BaseActivity() {
         initUI()
     }
 
-    private fun initViewModel() {
-        homeViewModel = ViewModelProviders.of(this, viewModelFactory).get(HomeViewModel::class.java)
-    }
-
-    private fun initUI() {
+    override fun initUI() {
         fetchUserButton.setOnClickListener {
             homeViewModel.fetchUser(this)
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
@@ -42,5 +38,9 @@ class HomeActivity : BaseActivity() {
             homeViewModel.fetchUserList(this, true)
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
         }
+    }
+
+    private fun initViewModel() {
+        homeViewModel = ViewModelProviders.of(this, viewModelFactory).get(HomeViewModel::class.java)
     }
 }

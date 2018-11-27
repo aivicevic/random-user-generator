@@ -1,7 +1,6 @@
 package com.randomusers.di.module
 
 import com.randomusers.ui.home.HomeActivity
-import com.randomusers.ui.userlist.UserListActivity
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
@@ -9,8 +8,5 @@ import dagger.android.ContributesAndroidInjector
 abstract class ActivityBindingModule {
 
     @ContributesAndroidInjector
-    abstract fun homeActivity(): HomeActivity
-
-    @ContributesAndroidInjector
-    abstract fun userListActivity(): UserListActivity
+    abstract fun contributesHomeActivity(): HomeActivity
 }

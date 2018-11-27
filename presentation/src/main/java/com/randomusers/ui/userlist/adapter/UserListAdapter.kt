@@ -1,4 +1,4 @@
-package com.randomusers.ui.userlist
+package com.randomusers.ui.userlist.adapter
 
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import com.domain.model.user.User
 import com.randomusers.R
+import com.randomusers.ui.userlist.UserListListener
 import com.randomusers.ui.util.StringUtil
 import kotlinx.android.synthetic.main.item_user.view.*
 
@@ -20,7 +21,8 @@ class UserListAdapter(private val userListListener: UserListListener) :
 
     override fun getItemCount(): Int = if (::userList.isInitialized) userList.size else 0
 
-    override fun onBindViewHolder(vh: ViewHolder, position: Int) = vh.bind(userList[position], userListListener)
+    override fun onBindViewHolder(vh: ViewHolder, position: Int) =
+        vh.bind(userList[position], userListListener)
 
     fun updateUserList(userList: List<User>) {
         this.userList = userList

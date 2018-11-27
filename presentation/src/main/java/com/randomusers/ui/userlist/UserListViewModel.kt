@@ -21,8 +21,8 @@ class UserListViewModel @Inject constructor(
     }
 
     override fun onCleared() {
-        super.onCleared()
         dispose()
+        super.onCleared()
     }
 
     fun updateUserList() {
@@ -50,7 +50,12 @@ class UserListViewModel @Inject constructor(
     }
 
     private fun getUserList() {
-        val observable = if (isFavoritesList) userRepository.getFavoritesFromDb() else userRepository.getUsers(100)
+        val observable =
+            if (isFavoritesList) {
+                userRepository.getFavoritesFromDb()
+            } else {
+                userRepository.getUsers(100)
+            }
         addDisposable(observable
             .compose(applySchedulersSingle(schedulerProvider))
             .doOnSubscribe { onLoadUserList() }
@@ -75,7 +80,11 @@ class UserListViewModel @Inject constructor(
     }
 
     private fun onRetrieveUserListError() {
-        stateLiveData.value = UserListState(UserListStateType.ERROR, obtainCurrentData(), R.string.load_users_error)
+        stateLiveData.value = UserListState(
+            UserListStateType.ERROR,
+            obtainCurrentData(),
+            R.string.load_users_error
+        )
     }
 
     // TODO: Refactor this and add pagination
