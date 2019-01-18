@@ -5,6 +5,6 @@ package com.domain.model.user
  * @constructor Sets all properties of the UserId
  * @property results the list of users
  */
-data class Users(
+data class UsersResponse(
     val results: List<User>
 )

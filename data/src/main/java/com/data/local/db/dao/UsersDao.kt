@@ -1,8 +1,11 @@
 package com.data.local.db.dao
 
-import android.arch.persistence.room.*
+import android.arch.lifecycle.LiveData
+import android.arch.persistence.room.Dao
+import android.arch.persistence.room.Insert
+import android.arch.persistence.room.Query
+import android.arch.persistence.room.Transaction
 import com.domain.model.user.User
-import io.reactivex.Single
 
 /*
  * TODO: Add documentation
@@ -10,39 +13,23 @@ import io.reactivex.Single
 @Dao
 interface UsersDao {
 
-    @Insert
+    @Query("SELECT * FROM favorites WHERE favorites.value = :userId")
     @Transaction
-    fun insertUser(user: User)
+    fun getFavorite(userId:String): LiveData<User?>
+
+    @Query("SELECT * FROM favorites")
+    @Transaction
+    fun getFavorites(): LiveData<List<User>>
 
     @Insert
     @Transaction
-    fun insertUsers(users: List<User>)
+    fun insertFavorite(user: User)
 
-    @Update
+    @Query("DELETE FROM favorites WHERE favorites.value = :userId")
     @Transaction
-    fun updateFavoriteUser(user: User)
+    fun deleteFavorite(userId: String)
 
-    @Query("SELECT * FROM user WHERE user.value = :userId")
-    @Transaction
-    fun getUserById(userId: String): User
-
-    @Query("SELECT * FROM user WHERE user.isFavorite = 1")
-    @Transaction
-    fun getFavorites(): Single<List<User>>
-
-    @Query("SELECT * FROM user")
-    @Transaction
-    fun getAllUsers(): List<User>
-
-    @Query("DELETE FROM user WHERE user.value = :userId")
-    @Transaction
-    fun deleteUserById(userId: String)
-
-    @Query("DELETE FROM user WHERE user.isFavorite = 0")
-    @Transaction
-    fun deleteNonFavorites()
-
-    @Query("DELETE FROM user")
+    @Query("DELETE FROM favorites")
     @Transaction
     fun deleteAll()
 }

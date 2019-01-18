@@ -1,10 +1,11 @@
 package com.randomusers.ui.userlist
 
 import android.arch.lifecycle.MutableLiveData
+import com.domain.Response
 import com.domain.model.user.User
+import com.domain.model.user.UsersResponse
 import com.domain.repository.UserRepository
 import com.domain.scheduler.SchedulerProvider
-import com.randomusers.R
 import com.randomusers.common.BaseViewModel
 import javax.inject.Inject
 
@@ -13,12 +14,8 @@ class UserListViewModel @Inject constructor(
     private val userRepository: UserRepository
 ) : BaseViewModel() {
 
-    val stateLiveData = MutableLiveData<UserListState>()
-    var isFavoritesList = false
-
-    init {
-        stateLiveData.value = UserListState(UserListStateType.DEFAULT, emptyList())
-    }
+    val usersResponseLiveData = MutableLiveData<Response<UsersResponse>>()
+    val favoriteUsersLiveData = userRepository.getFavoritesFromDb()
 
     override fun onCleared() {
         dispose()
@@ -26,67 +23,40 @@ class UserListViewModel @Inject constructor(
     }
 
     fun updateUserList() {
-        stateLiveData.value = UserListState(UserListStateType.LOADING, obtainCurrentData())
+        usersResponseLiveData.value = Response.loading()
         getUserList()
     }
 
-    fun resetUserList() {
-        stateLiveData.value = UserListState(UserListStateType.LOADING, emptyList())
-        if (!isFavoritesList) {
-            userRepository.deleteNonFavoritesFromDb()
-        }
-        updateUserList()
-    }
-
     fun restoreUserList() {
-        stateLiveData.value = UserListState(UserListStateType.DEFAULT, obtainCurrentData())
+        usersResponseLiveData.value = usersResponseLiveData.value
     }
 
     fun toggleFavorite(user: User) {
-        userRepository.updateFavoriteInDb(user.also { it.isFavorite = !it.isFavorite })
-        if (isFavoritesList) {
-            resetUserList()
+        user.isFavorite = !user.isFavorite
+        if (user.isFavorite) {
+            userRepository.saveFavoriteToDb(user)
+        } else {
+            userRepository.deleteFavoriteFromDb(user)
         }
     }
 
     private fun getUserList() {
-        val observable =
-            if (isFavoritesList) {
-                userRepository.getFavoritesFromDb()
-            } else {
-                userRepository.getUsers(100)
-            }
-        addDisposable(observable
+        addDisposable(userRepository.getUsers(100)
             .compose(applySchedulersSingle(schedulerProvider))
             .doOnSubscribe { onLoadUserList() }
-            .subscribe(
-                { result -> onRetrieveUserListSuccess(result) },
-                { onRetrieveUserListError() }
-            )
+            .subscribe(::onRetrieveUserListSuccess, ::onRetrieveUserListError)
         )
     }
 
     private fun onLoadUserList() {
-        stateLiveData.value = UserListState(UserListStateType.LOADING, emptyList())
+        usersResponseLiveData.value = Response.loading()
     }
 
-    private fun onRetrieveUserListSuccess(users: List<User>) {
-        val userList = obtainCurrentData().toMutableList()
-        userList.addAll(users)
-        stateLiveData.value = UserListState(UserListStateType.DEFAULT, userList)
-        if (!isFavoritesList) {
-            userRepository.saveUsersToDb(users)
-        }
+    private fun onRetrieveUserListSuccess(usersResponse: UsersResponse) {
+        usersResponseLiveData.value = Response.success(usersResponse)
     }
 
-    private fun onRetrieveUserListError() {
-        stateLiveData.value = UserListState(
-            UserListStateType.ERROR,
-            obtainCurrentData(),
-            R.string.load_users_error
-        )
+    private fun onRetrieveUserListError(throwable: Throwable) {
+        usersResponseLiveData.value = Response.error(throwable)
     }
-
-    // TODO: Refactor this and add pagination
-    private fun obtainCurrentData() = stateLiveData.value?.data ?: emptyList()
 }

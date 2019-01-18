@@ -11,7 +11,7 @@ class HomeViewModel @Inject constructor() : BaseViewModel() {
         // Directly to user info activity
     }
 
-    fun fetchUserList(context: Context, isFavoritesList: Boolean) {
-        context.startActivity(UserListActivity.getStartingIntent(context, isFavoritesList))
+    fun fetchUserList(context: Context, openFavoritesList: Boolean) {
+        context.startActivity(UserListActivity.getStartingIntent(context, openFavoritesList))
     }
 }

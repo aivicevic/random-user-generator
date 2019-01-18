@@ -1,9 +1,11 @@
 package com.data.remote.repository.impl
 
+import android.arch.lifecycle.LiveData
 import com.data.local.db.RandomUsersDatabase
 import com.data.local.db.ioThread
 import com.data.remote.service.UserService
 import com.domain.model.user.User
+import com.domain.model.user.UsersResponse
 import com.domain.repository.UserRepository
 import io.reactivex.Single
 import javax.inject.Inject
@@ -15,40 +17,23 @@ class UserRepositoryImpl @Inject constructor(
     private val dbInstance: RandomUsersDatabase
 ) : UserRepository {
 
-    override fun getUser(): Single<User> = userService.getUser()
+    override fun getUsers(results: Int): Single<UsersResponse> = userService.getUsers(results)
 
-    override fun getUsers(results: Int): Single<List<User>> =
-        userService.getUsers(results).map { users -> users.results }
+    override fun getFavoriteFromDb(user: User): LiveData<User?> =
+        dbInstance.usersDao().getFavorite(user.id.value)
 
-    override fun saveUserToDB(user: User) {
-        ioThread { dbInstance.usersDao().insertUser(user) }
+    override fun getFavoritesFromDb(): LiveData<List<User>> =
+        dbInstance.usersDao().getFavorites()
+
+    override fun saveFavoriteToDb(user: User) {
+        ioThread { dbInstance.usersDao().insertFavorite(user) }
     }
 
-    override fun saveUsersToDb(users: List<User>) {
-        ioThread { dbInstance.usersDao().insertUsers(users) }
+    override fun deleteFavoriteFromDb(user: User) {
+        ioThread { dbInstance.usersDao().deleteFavorite(user.id.value) }
     }
 
-    override fun updateFavoriteInDb(user: User) {
-        ioThread { dbInstance.usersDao().updateFavoriteUser(user) }
-    }
-
-    override fun getUserFromDb(user: User) {
-        dbInstance.usersDao().getUserById(user.id.value)
-    }
-
-    override fun getFavoritesFromDb(): Single<List<User>> = dbInstance.usersDao().getFavorites()
-
-    override fun getAllUsersFromDb(): List<User> = dbInstance.usersDao().getAllUsers()
-
-    override fun deleteUserFromDb(user: User) {
-        ioThread { dbInstance.usersDao().deleteUserById(user.id.value) }
-    }
-
-    override fun deleteNonFavoritesFromDb() {
-        ioThread { dbInstance.usersDao().deleteNonFavorites() }
-    }
-
-    override fun deleteAllUsersFromDb() {
+    override fun deleteAllFavoritesFromDb() {
         ioThread { dbInstance.usersDao().deleteAll() }
     }
 }

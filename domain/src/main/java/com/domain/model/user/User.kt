@@ -5,8 +5,8 @@ import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey
 
 /**
- * Class which provides a model for post
- * @constructor Sets all properties of the post
+ * Class which provides a model for api response as well as an entity object for local db
+ * @constructor Sets all properties of the user
  * @property id the unique identifier of the user object
  * @property name the nested name object of the user object
  * @property location the nested location object of the user object
@@ -14,9 +14,9 @@ import android.arch.persistence.room.PrimaryKey
  * @property dob the nested dob object of the user
  * @property phone the home phone number of the user
  * @property cell the cell phone number of the user
- * @property isFavorite flag to determine if user has been saved to favorites
+ * @property isFavorite flag to determine if use is a favorite
  */
-@Entity
+@Entity(tableName = "favorites")
 data class User(
     @Embedded @field:PrimaryKey val id: UserId,
     @Embedded val name: UserName,

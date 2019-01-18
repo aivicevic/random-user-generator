@@ -1,29 +1,21 @@
 package com.domain.repository
 
+import android.arch.lifecycle.LiveData
 import com.domain.model.user.User
+import com.domain.model.user.UsersResponse
 import io.reactivex.Single
 
 interface UserRepository {
 
-    fun getUser(): Single<User>
+    fun getUsers(results: Int): Single<UsersResponse>
 
-    fun getUsers(results: Int): Single<List<User>>
+    fun getFavoriteFromDb(user: User): LiveData<User?>
 
-    fun saveUserToDB(user: User)
+    fun getFavoritesFromDb(): LiveData<List<User>>
 
-    fun saveUsersToDb(users: List<User>)
+    fun saveFavoriteToDb(user: User)
 
-    fun updateFavoriteInDb(user: User)
+    fun deleteFavoriteFromDb(user: User)
 
-    fun getUserFromDb(user: User)
-
-    fun getFavoritesFromDb(): Single<List<User>>
-
-    fun getAllUsersFromDb(): List<User>
-
-    fun deleteUserFromDb(user: User)
-
-    fun deleteNonFavoritesFromDb()
-
-    fun deleteAllUsersFromDb()
+    fun deleteAllFavoritesFromDb()
 }
