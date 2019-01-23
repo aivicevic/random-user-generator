@@ -10,7 +10,7 @@ import com.bumptech.glide.Glide
 import com.domain.model.user.User
 import com.randomusers.R
 import com.randomusers.ui.userlist.UserListListener
-import com.randomusers.ui.util.StringUtil
+import com.randomusers.util.StringUtil
 import kotlinx.android.synthetic.main.item_user.view.*
 
 class UserListAdapter(private val userListListener: UserListListener?) :

@@ -1,4 +1,4 @@
-package com.randomusers.ui.util
+package com.randomusers.util
 
 class StringUtil {
 

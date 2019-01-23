@@ -4,7 +4,6 @@ import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
 import com.randomusers.common.ViewModelFactory
 import com.randomusers.common.ViewModelKey
-import com.randomusers.ui.home.HomeViewModel
 import com.randomusers.ui.userlist.UserListViewModel
 import dagger.Binds
 import dagger.Module
@@ -14,12 +13,9 @@ import dagger.multibindings.IntoMap
 abstract class ViewModelModule {
 
     @Binds
-    internal abstract fun bindViewModelFactory(viewModelFactory: ViewModelFactory): ViewModelProvider.Factory
-
-    @Binds
-    @IntoMap
-    @ViewModelKey(HomeViewModel::class)
-    internal abstract fun homeViewModel(viewModel: HomeViewModel): ViewModel
+    internal abstract fun bindViewModelFactory(
+        viewModelFactory: ViewModelFactory
+    ): ViewModelProvider.Factory
 
     @Binds
     @IntoMap
