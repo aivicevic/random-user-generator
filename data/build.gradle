@@ -10,7 +10,18 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        kapt {
+            arguments {
+                arg("room.schemaLocation", "$projectDir/schemas".toString())
+            }
+        }
     }
+
+    sourceSets {
+        androidTest.assets.srcDirs += files("$projectDir/schemas".toString())
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -31,18 +42,9 @@ dependencies {
     // Dependency Injection
     implementation dagger.dagger
     kapt dagger.compiler
-    kapt dagger.androidProcessor
-
-    // RxJava
-    implementation rxJava.rxJava
-    implementation rxJava.rxAndroid
 
     // Network
-    implementation okhttp.okhttp
-    implementation okhttp.loggingInterceptor
     implementation retrofit.retrofit
-    implementation retrofit.rxJavaAdapter
-    implementation retrofit.moshiConverter
 
     // Room
     implementation room.runtime

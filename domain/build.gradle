@@ -11,6 +11,7 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -29,13 +30,6 @@ dependencies {
     // RxJava
     implementation rxJava.rxJava
     implementation rxJava.rxAndroid
-
-    // Network
-    implementation okhttp.okhttp
-    implementation okhttp.loggingInterceptor
-    implementation retrofit.retrofit
-    implementation retrofit.rxJavaAdapter
-    implementation retrofit.moshiConverter
 
     // Room
     implementation room.runtime
