@@ -9,6 +9,7 @@ import dagger.Provides
 
 @Module
 class RepositoryModule {
+
     @Provides
     fun providesUserRepository(service: UserService, db: RandomUsersDatabase): UserRepository =
         UserRepositoryImpl(service, db)

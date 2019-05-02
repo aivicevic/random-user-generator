@@ -25,6 +25,11 @@ class UserListFragment : ViewLifecycleFragment() {
     private var userListListener: UserListListener? = null
     private var userListViewModel: UserListViewModel? = null
 
+    private val usersResponseObserver = Observer<Response<UsersResponse>> { response ->
+        response?.run {
+            processUsersResponse(this)
+        }
+    }
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
@@ -37,7 +42,7 @@ class UserListFragment : ViewLifecycleFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        initViewModel()
+        initViewModels()
 
         savedInstanceState?.let {
             userListViewModel?.restoreUserList()
@@ -61,20 +66,19 @@ class UserListFragment : ViewLifecycleFragment() {
         super.onDestroyView()
     }
 
-    private fun initViewModel() {
-        activity?.let {
-            userListViewModel = ViewModelProviders.of(it).get(UserListViewModel::class.java)
+    private fun initViewModels() {
+        activity?.run {
+            userListViewModel = ViewModelProviders.of(this).get(UserListViewModel::class.java)
         }
 
         userListViewModel?.usersResponseLiveData?.observe(
-            viewLifecycleOwner ?: this, Observer { response ->
-                response?.let { processUsersResponse(it) }
-            })
+            viewLifecycleOwner ?: this, usersResponseObserver
+        )
     }
 
     private fun initUI() {
         userListAdapter = UserListAdapter(userListListener)
-        userList.apply {
+        userList.run {
             adapter = userListAdapter
             layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
             addItemDecoration(DividerItemDecoration(activity, DividerItemDecoration.VERTICAL))
@@ -102,6 +106,7 @@ class UserListFragment : ViewLifecycleFragment() {
     }
 
     companion object {
+
         fun newInstance(): UserListFragment = UserListFragment()
     }
 }

@@ -8,7 +8,7 @@ package com.domain.model.user
  * @property last the last name of user
  */
 data class UserName(
-        val title: String,
-        val first: String,
-        val last: String
+    val title: String,
+    val first: String,
+    val last: String
 )

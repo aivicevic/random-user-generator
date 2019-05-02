@@ -9,8 +9,8 @@ package com.domain.model.user
  * @property postcode the postcode of user address
  */
 data class UserLocation(
-        val street: String,
-        val city: String,
-        val state: String,
-        val postcode: String
+    val street: String,
+    val city: String,
+    val state: String,
+    val postcode: String
 )

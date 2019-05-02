@@ -7,6 +7,7 @@ import retrofit2.Retrofit
 
 @Module
 class ServiceModule {
+
     @Provides
     internal fun provideUserService(retrofit: Retrofit) = retrofit.create(UserService::class.java)
 }

@@ -7,6 +7,6 @@ package com.domain.model.user
  * @property value the uid value
  */
 data class UserId(
-        val name: String,
-        val value: String
+    val name: String,
+    val value: String
 )

@@ -53,7 +53,8 @@ class UserListAdapter(private val userListListener: UserListListener?) :
         }
     }
 
-    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+
         private val context = view.context
         private val thumbnail = view.userPictureThumbnail
         private val name = view.userFullName

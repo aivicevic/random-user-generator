@@ -7,6 +7,6 @@ package com.domain.model.user
  * @property age the age of user
  */
 data class UserDob(
-        val date: String,
-        val age: String
+    val date: String,
+    val age: String
 )

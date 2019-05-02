@@ -3,6 +3,7 @@ package com.randomusers.util
 class StringUtil {
 
     companion object {
+
         fun capitalizeWords(string: String): String {
             val words = string.split(" ")
             return StringBuilder().apply {
