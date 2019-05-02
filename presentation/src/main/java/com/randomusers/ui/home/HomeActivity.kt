@@ -16,19 +16,18 @@ class HomeActivity : BaseActivity() {
     }
 
     override fun initUI() {
-        fetchUserButton.setOnClickListener {
-            // TODO: Open UserDetail
-            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
-        }
+        fetchUserButton.setOnClickListener { navigateToUserDetail() }
+        fetchUsersButton.setOnClickListener { navigateToUserList(false) }
+        favoritesButton.setOnClickListener { navigateToUserList(true) }
+    }
 
-        fetchUsersButton.setOnClickListener {
-            startActivity(UserListActivity.getStartingIntent(this, false))
-            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
-        }
+    private fun navigateToUserDetail() {
+        // TODO: Open UserDetail
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+    }
 
-        favoritesButton.setOnClickListener {
-            startActivity(UserListActivity.getStartingIntent(this, true))
-            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
-        }
+    private fun navigateToUserList(isOpenFavoritesOnStart: Boolean) {
+        startActivity(UserListActivity.getStartingIntent(this, isOpenFavoritesOnStart))
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
     }
 }

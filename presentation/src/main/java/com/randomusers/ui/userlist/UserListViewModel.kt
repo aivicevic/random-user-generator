@@ -28,7 +28,7 @@ class UserListViewModel @Inject constructor(
     }
 
     fun restoreUserList() {
-        usersResponseLiveData.value = usersResponseLiveData.value
+        // TODO: Does this need any logic?
     }
 
     fun toggleFavorite(user: User) {

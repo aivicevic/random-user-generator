@@ -24,8 +24,8 @@ class UserListActivity : BaseActivity(), UserListListener {
     @Inject lateinit var userListViewModel: UserListViewModel
 
     private val userListPagerAdapter = UserListPagerAdapter(supportFragmentManager)
-    private var openFavoritesList: Boolean = false
     private var errorSnackbar: Snackbar? = null
+    private var shouldOpenFavorites: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
@@ -33,7 +33,7 @@ class UserListActivity : BaseActivity(), UserListListener {
         setContentView(R.layout.activity_user_list)
 
         processIncomingIntent()
-        initViewModel()
+        initViewModels()
     }
 
     override fun initUI() {
@@ -45,7 +45,7 @@ class UserListActivity : BaseActivity(), UserListListener {
             }
         })
 
-        viewPager.currentItem = if (openFavoritesList) 1 else 0
+        viewPager.currentItem = if (shouldOpenFavorites) 1 else 0
     }
 
     override fun openUserDetail() {
@@ -68,11 +68,11 @@ class UserListActivity : BaseActivity(), UserListListener {
 
     private fun processIncomingIntent() {
         if (null != intent && null != intent.extras) {
-            openFavoritesList = intent!!.extras!!.getBoolean(KEY_OPEN_FAVORITES_LIST, false)
+            shouldOpenFavorites = intent!!.extras!!.getBoolean(KEY_SHOULD_OPEN_FAVORITES, false)
         }
     }
 
-    private fun initViewModel() {
+    private fun initViewModels() {
         userListViewModel =
                 ViewModelProviders.of(this, viewModelFactory).get(UserListViewModel::class.java)
     }
@@ -83,11 +83,14 @@ class UserListActivity : BaseActivity(), UserListListener {
     }
 
     companion object {
-        private const val KEY_OPEN_FAVORITES_LIST = "KEY_OPEN_FAVORITES_LIST"
+
+        private const val KEY_SHOULD_OPEN_FAVORITES = "KEY_SHOULD_OPEN_FAVORITES"
 
         fun getStartingIntent(context: Context, openFavoritesList: Boolean): Intent {
             return Intent(context, UserListActivity::class.java).apply {
-                putExtras(Bundle().apply { putBoolean(KEY_OPEN_FAVORITES_LIST, openFavoritesList) })
+                putExtras(Bundle().apply {
+                    putBoolean(KEY_SHOULD_OPEN_FAVORITES, openFavoritesList)
+                })
             }
         }
     }

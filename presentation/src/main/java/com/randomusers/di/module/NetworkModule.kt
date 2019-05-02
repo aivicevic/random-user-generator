@@ -14,11 +14,6 @@ import javax.inject.Singleton
 
 @Module
 class NetworkModule {
-    companion object {
-        private const val CONNECT_TIMEOUT_IN_MINUTES = 1
-        private const val READ_TIMEOUT_IN_SECONDS = 60
-        private const val WRITE_TIMEOUT_IN_SECONDS = 60
-    }
 
     @Provides
     @Singleton
@@ -33,7 +28,9 @@ class NetworkModule {
     @Provides
     internal fun provideOkHttpClient(): OkHttpClient {
         return OkHttpClient.Builder()
-            .addInterceptor(HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY })
+            .addInterceptor(
+                HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY }
+            )
             .connectTimeout(CONNECT_TIMEOUT_IN_MINUTES.toLong(), TimeUnit.SECONDS)
             .readTimeout(READ_TIMEOUT_IN_SECONDS.toLong(), TimeUnit.SECONDS)
             .writeTimeout(WRITE_TIMEOUT_IN_SECONDS.toLong(), TimeUnit.SECONDS)
@@ -43,4 +40,11 @@ class NetworkModule {
     @Provides
     @Singleton
     internal fun provideSchedulerProvider(): SchedulerProvider = SchedulerProvider()
+
+    companion object {
+
+        private const val CONNECT_TIMEOUT_IN_MINUTES = 1
+        private const val READ_TIMEOUT_IN_SECONDS = 60
+        private const val WRITE_TIMEOUT_IN_SECONDS = 60
+    }
 }

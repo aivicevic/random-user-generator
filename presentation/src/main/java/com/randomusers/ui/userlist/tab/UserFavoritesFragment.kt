@@ -23,6 +23,12 @@ class UserFavoritesFragment : ViewLifecycleFragment() {
     private var userListListener: UserListListener? = null
     private var userListViewModel: UserListViewModel? = null
 
+    private val favoriteUsersObserver = Observer<List<User>> { favorites ->
+        favorites?.run {
+            processFavorites(this)
+        }
+    }
+
     override fun onAttach(context: Context?) {
         super.onAttach(context)
 
@@ -34,7 +40,7 @@ class UserFavoritesFragment : ViewLifecycleFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        initViewModel()
+        initViewModels()
     }
 
     override fun onCreateView(
@@ -54,20 +60,19 @@ class UserFavoritesFragment : ViewLifecycleFragment() {
         super.onDestroyView()
     }
 
-    private fun initViewModel() {
-        activity?.let {
-            userListViewModel = ViewModelProviders.of(it).get(UserListViewModel::class.java)
+    private fun initViewModels() {
+        activity?.run {
+            userListViewModel = ViewModelProviders.of(this).get(UserListViewModel::class.java)
         }
 
         userListViewModel?.favoriteUsersLiveData?.observe(
-            viewLifecycleOwner ?: this, Observer { favorites ->
-                favorites?.let { processFavorites(it) }
-            })
+            viewLifecycleOwner ?: this, favoriteUsersObserver
+        )
     }
 
     private fun initUI() {
         userListAdapter = UserListAdapter(userListListener)
-        userList.apply {
+        userList.run {
             adapter = userListAdapter
             layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
             addItemDecoration(DividerItemDecoration(activity, DividerItemDecoration.VERTICAL))
@@ -82,6 +87,7 @@ class UserFavoritesFragment : ViewLifecycleFragment() {
     }
 
     companion object {
+
         fun newInstance(): UserFavoritesFragment = UserFavoritesFragment()
     }
 }

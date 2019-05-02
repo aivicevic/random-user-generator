@@ -44,6 +44,7 @@ abstract class ViewLifecycleFragment : Fragment() {
     }
 
     inner class ViewLifecycleOwner : LifecycleOwner {
+
         private val lifecycleRegistry = LifecycleRegistry(this)
 
         override fun getLifecycle() = lifecycleRegistry

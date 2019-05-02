@@ -8,7 +8,7 @@ package com.domain.model.user
  * @property thumbnail the url of thumbnail image
  */
 data class UserPicture(
-        val large: String,
-        val medium: String,
-        val thumbnail: String
+    val large: String,
+    val medium: String,
+    val thumbnail: String
 )

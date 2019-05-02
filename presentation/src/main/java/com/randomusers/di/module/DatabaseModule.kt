@@ -9,6 +9,7 @@ import javax.inject.Singleton
 
 @Module
 class DatabaseModule {
+
     @Provides
     @Singleton
     fun provideAppDatabase(application: RandomUsersApplication): RandomUsersDatabase =

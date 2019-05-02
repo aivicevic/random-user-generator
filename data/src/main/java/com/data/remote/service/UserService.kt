@@ -7,10 +7,13 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface UserService {
+
     @GET("./")
     fun getUser(@Query("nat") nationalities: String = "us"): Single<User>
 
     @GET("./")
-    fun getUsers(@Query("results") results: Int,
-                 @Query("nat") nationalities: String = "us"): Single<UsersResponse>
+    fun getUsers(
+        @Query("results") results: Int,
+        @Query("nat") nationalities: String = "us"
+    ): Single<UsersResponse>
 }
