@@ -1,14 +1,14 @@
 package com.randomusers.ui.userlist
 
-import android.arch.lifecycle.ViewModelProvider
-import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.annotation.StringRes
-import android.support.design.widget.Snackbar
 import android.widget.Toast
+import androidx.annotation.StringRes
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import com.domain.model.user.User
+import com.google.android.material.snackbar.Snackbar
 import com.randomusers.R
 import com.randomusers.common.BaseActivity
 import com.randomusers.ui.userlist.adapter.UserListPagerAdapter

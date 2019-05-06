@@ -1,14 +1,15 @@
 package com.randomusers.ui.userlist.tab
 
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.os.Bundle
-import android.support.v7.widget.DividerItemDecoration
-import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.domain.Response
 import com.domain.Status
 import com.domain.model.user.UsersResponse
@@ -31,7 +32,7 @@ class UserListFragment : ViewLifecycleFragment() {
         }
     }
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         super.onAttach(context)
 
         if (context is UserListListener) {
@@ -80,7 +81,7 @@ class UserListFragment : ViewLifecycleFragment() {
         userListAdapter = UserListAdapter(userListListener)
         userList.run {
             adapter = userListAdapter
-            layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
+            layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
             addItemDecoration(DividerItemDecoration(activity, DividerItemDecoration.VERTICAL))
         }
 

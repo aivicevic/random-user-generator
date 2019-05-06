@@ -1,6 +1,6 @@
 package com.randomusers.di.module
 
-import android.arch.persistence.room.Room
+import androidx.room.Room
 import com.data.local.db.RandomUsersDatabase
 import com.randomusers.RandomUsersApplication
 import dagger.Module

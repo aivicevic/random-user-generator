@@ -1,6 +1,6 @@
 package com.randomusers.ui.userlist
 
-import android.support.annotation.StringRes
+import androidx.annotation.StringRes
 import com.domain.model.user.User
 
 interface UserListListener {
