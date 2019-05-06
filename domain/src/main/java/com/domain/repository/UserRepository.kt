@@ -1,6 +1,6 @@
 package com.domain.repository
 
-import android.arch.lifecycle.LiveData
+import androidx.lifecycle.LiveData
 import com.domain.model.user.User
 import com.domain.model.user.UsersResponse
 import io.reactivex.Single

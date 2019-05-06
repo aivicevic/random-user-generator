@@ -1,6 +1,6 @@
 package com.randomusers.ui.userlist
 
-import android.arch.lifecycle.MutableLiveData
+import androidx.lifecycle.MutableLiveData
 import com.domain.Response
 import com.domain.model.user.User
 import com.domain.model.user.UsersResponse

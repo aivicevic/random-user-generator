@@ -1,6 +1,6 @@
 package com.randomusers.common
 
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.ViewModel
 import com.domain.scheduler.SchedulerProvider
 import io.reactivex.Observable
 import io.reactivex.ObservableTransformer

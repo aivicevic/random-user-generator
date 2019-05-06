@@ -1,6 +1,6 @@
 package com.data.remote.repository.impl
 
-import android.arch.lifecycle.LiveData
+import androidx.lifecycle.LiveData
 import com.data.local.db.RandomUsersDatabase
 import com.data.local.db.ioThread
 import com.data.remote.service.UserService

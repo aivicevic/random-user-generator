@@ -1,11 +1,11 @@
 package com.randomusers.common
 
-import android.arch.lifecycle.Lifecycle
-import android.arch.lifecycle.LifecycleOwner
-import android.arch.lifecycle.LifecycleRegistry
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.view.View
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LifecycleRegistry
 
 abstract class ViewLifecycleFragment : Fragment() {
 

@@ -1,8 +1,8 @@
 package com.domain.model.user
 
-import android.arch.persistence.room.Embedded
-import android.arch.persistence.room.Entity
-import android.arch.persistence.room.PrimaryKey
+import androidx.room.Embedded
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
 /**
  * Class which provides a model for api response as well as an entity object for local db
