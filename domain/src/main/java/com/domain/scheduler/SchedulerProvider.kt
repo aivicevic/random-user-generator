@@ -1,24 +1,12 @@
 package com.domain.scheduler
 
 import io.reactivex.Scheduler
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 
-class SchedulerProvider {
+interface SchedulerProvider {
 
-    fun computation(): Scheduler {
-        return Schedulers.computation()
-    }
+    fun computation(): Scheduler
 
-    fun io(): Scheduler {
-        return Schedulers.io()
-    }
+    fun io(): Scheduler
 
-    fun mainThread(): Scheduler {
-        return AndroidSchedulers.mainThread()
-    }
-
-    fun newThread(): Scheduler {
-        return Schedulers.newThread()
-    }
+    fun mainThread(): Scheduler
 }

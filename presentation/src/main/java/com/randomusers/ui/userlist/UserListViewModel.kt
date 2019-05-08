@@ -1,5 +1,6 @@
 package com.randomusers.ui.userlist
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.domain.Response
 import com.domain.model.user.User
@@ -15,32 +16,16 @@ class UserListViewModel @Inject constructor(
 ) : BaseViewModel() {
 
     val usersResponseLiveData = MutableLiveData<Response<UsersResponse>>()
-    val favoriteUsersLiveData = userRepository.getFavoritesFromDb()
 
-    override fun onCleared() {
-        dispose()
-        super.onCleared()
-    }
+    lateinit var favoriteUsersLiveData: LiveData<List<User>>
 
-    fun updateUserList() {
-        usersResponseLiveData.value = Response.loading()
-        getUserList()
-    }
-
-    fun restoreUserList() {
-        // TODO: Does this need any logic?
-    }
-
-    fun toggleFavorite(user: User) {
-        user.isFavorite = !user.isFavorite
-        if (user.isFavorite) {
-            userRepository.saveFavoriteToDb(user)
-        } else {
-            userRepository.deleteFavoriteFromDb(user)
+    fun initFavoritesList() {
+        if (!::favoriteUsersLiveData.isInitialized) {
+            favoriteUsersLiveData = userRepository.getFavoritesFromDb()
         }
     }
 
-    private fun getUserList() {
+    fun updateUserList() {
         addDisposable(userRepository.getUsers(100)
             .compose(applySchedulersSingle(schedulerProvider))
             .doOnSubscribe { onLoadUserList() }
@@ -58,5 +43,18 @@ class UserListViewModel @Inject constructor(
 
     private fun onRetrieveUserListError(throwable: Throwable) {
         usersResponseLiveData.value = Response.error(throwable)
+    }
+
+    fun restoreUserList() {
+        // TODO: Add necessary logic
+    }
+
+    fun toggleFavorite(user: User) {
+        user.isFavorite = !user.isFavorite
+        if (user.isFavorite) {
+            userRepository.saveFavoriteToDb(user)
+        } else {
+            userRepository.deleteFavoriteFromDb(user)
+        }
     }
 }
