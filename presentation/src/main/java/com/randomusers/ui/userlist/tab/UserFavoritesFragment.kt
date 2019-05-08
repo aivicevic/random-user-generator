@@ -66,9 +66,12 @@ class UserFavoritesFragment : ViewLifecycleFragment() {
             userListViewModel = ViewModelProviders.of(this).get(UserListViewModel::class.java)
         }
 
-        userListViewModel?.favoriteUsersLiveData?.observe(
-            viewLifecycleOwner ?: this, favoriteUsersObserver
-        )
+        userListViewModel?.run {
+            initFavoritesList()
+            favoriteUsersLiveData.observe(
+                viewLifecycleOwner ?: this@UserFavoritesFragment, favoriteUsersObserver
+            )
+        }
     }
 
     private fun initUI() {

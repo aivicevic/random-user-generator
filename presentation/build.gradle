@@ -69,8 +69,15 @@ dependencies {
     // Glide
     implementation "com.github.bumptech.glide:glide:$project.glideVersion"
 
-    // Testing
-    testImplementation testing.jUnit
+    // Testing - TODO: Clean-up unnecessary dependencies when test coverage is complete
+    testImplementation androidx.testing.core
+    testImplementation androidx.testing.coreArch
+    testImplementation androidx.testing.rules
+    testImplementation androidx.testing.jUnitExt
+    testImplementation androidx.testing.truthExt
+    testImplementation testing.mockito
+    testImplementation testing.mockitoKt
+    testImplementation testing.googleTruth
     androidTestImplementation androidx.testing.runner
     androidTestImplementation androidx.testing.espresso
     androidTestUtil androidx.testing.orchestrator

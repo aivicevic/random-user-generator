@@ -2,6 +2,7 @@ package com.randomusers.di.module
 
 import com.data.remote.ApiConstants
 import com.domain.scheduler.SchedulerProvider
+import com.domain.scheduler.SchedulerProviderImpl
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
@@ -39,7 +40,7 @@ class NetworkModule {
 
     @Provides
     @Singleton
-    internal fun provideSchedulerProvider(): SchedulerProvider = SchedulerProvider()
+    internal fun provideSchedulerProvider(): SchedulerProvider = SchedulerProviderImpl()
 
     companion object {
 

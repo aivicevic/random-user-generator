@@ -40,7 +40,7 @@ dependencies {
     kapt androidx.room.compiler
 
     // Testing
-    testImplementation testing.jUnit
+    testImplementation androidx.testing.jUnitExt
     androidTestImplementation androidx.testing.runner
     androidTestUtil androidx.testing.orchestrator
 }
