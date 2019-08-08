@@ -1,10 +1,9 @@
 package com.randomusers.ui.userlist.adapter
 
-import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.domain.model.user.User
@@ -14,46 +13,16 @@ import com.randomusers.util.StringUtil
 import kotlinx.android.synthetic.main.item_user.view.*
 
 class UserListAdapter(private val userListListener: UserListListener?) :
-    RecyclerView.Adapter<UserListAdapter.ViewHolder>() {
+    ListAdapter<User, UserListAdapter.UserViewHolder>(UserListDiffCallback()) {
 
-    private lateinit var userList: List<User>
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserViewHolder =
+        UserViewHolder(LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_user, parent, false))
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
-        ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_user, parent, false))
+    override fun onBindViewHolder(vh: UserViewHolder, position: Int) =
+        vh.bind(getItem(position), userListListener)
 
-    override fun getItemCount(): Int = if (::userList.isInitialized) userList.size else 0
-
-    override fun onBindViewHolder(vh: ViewHolder, position: Int) =
-        vh.bind(userList[position], userListListener)
-
-    fun updateUserList(newUserList: List<User>) {
-        if (!::userList.isInitialized) {
-            userList = newUserList
-            notifyItemRangeInserted(0, userList.size)
-        } else {
-            val handler = Handler()
-            Thread {
-                val result = DiffUtil.calculateDiff(object: DiffUtil.Callback() {
-                    override fun getOldListSize() = userList.size
-
-                    override fun getNewListSize() = newUserList.size
-
-                    override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int) =
-                        userList[oldItemPosition].id.value == newUserList[newItemPosition].id.value
-
-                    override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int) =
-                        userList[oldItemPosition] == newUserList[newItemPosition]
-                })
-
-                handler.post {
-                    userList = newUserList
-                    result.dispatchUpdatesTo(this)
-                }
-            }.start()
-        }
-    }
-
-    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    inner class UserViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         private val context = view.context
         private val thumbnail = view.userPictureThumbnail

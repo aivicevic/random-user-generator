@@ -2,6 +2,7 @@ package com.randomusers.ui.userlist.tab
 
 import android.content.Context
 import android.os.Bundle
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.domain.Response
 import com.domain.Status
+import com.domain.model.user.User
 import com.domain.model.user.UsersResponse
 import com.randomusers.R
 import com.randomusers.common.ViewLifecycleFragment
@@ -25,12 +27,6 @@ class UserListFragment : ViewLifecycleFragment() {
     private lateinit var userListAdapter: UserListAdapter
     private var userListListener: UserListListener? = null
     private var userListViewModel: UserListViewModel? = null
-
-    private val usersResponseObserver = Observer<Response<UsersResponse>> { response ->
-        response?.run {
-            processUsersResponse(this)
-        }
-    }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -50,31 +46,48 @@ class UserListFragment : ViewLifecycleFragment() {
         } ?: userListViewModel?.updateUserList()
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? =
-        inflater.inflate(R.layout.fragment_user_list, container, false)
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        initUI()
-    }
-
-    override fun onDestroyView() {
-        userList.adapter = null
-        super.onDestroyView()
-    }
-
     private fun initViewModels() {
         activity?.run {
             userListViewModel = ViewModelProviders.of(this).get(UserListViewModel::class.java)
         }
 
         userListViewModel?.usersResponseLiveData?.observe(
-            viewLifecycleOwner ?: this, usersResponseObserver
+            viewLifecycleOwner ?: this@UserListFragment,
+            Observer<Response<UsersResponse>> { response ->
+                response?.run {
+                    processUsersResponse(this)
+                }
+            }
         )
+    }
+
+    private fun processUsersResponse(response: Response<UsersResponse>) {
+        when (response.status) {
+            Status.LOADING -> {
+                swipeRefresh.isRefreshing = true
+                userListListener?.hideError()
+            }
+            Status.SUCCESS -> {
+                swipeRefresh.isRefreshing = false
+                userListListener?.hideError()
+                userListAdapter.submitList(response.data?.results!!)
+            }
+            Status.ERROR -> {
+                swipeRefresh.isRefreshing = false
+                userListListener?.showError(R.string.load_users_error)
+            }
+        }
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? = inflater.inflate(R.layout.fragment_user_list, container, false)
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initUI()
     }
 
     private fun initUI() {
@@ -88,22 +101,9 @@ class UserListFragment : ViewLifecycleFragment() {
         swipeRefresh.setOnRefreshListener { userListViewModel?.updateUserList() }
     }
 
-    private fun processUsersResponse(response: Response<UsersResponse>) {
-        when (response.status) {
-            Status.LOADING -> {
-                swipeRefresh.isRefreshing = true
-                userListListener?.hideError()
-            }
-            Status.SUCCESS -> {
-                swipeRefresh.isRefreshing = false
-                userListListener?.hideError()
-                userListAdapter.updateUserList(response.data?.results!!)
-            }
-            Status.ERROR -> {
-                swipeRefresh.isRefreshing = false
-                userListListener?.showError(R.string.load_users_error)
-            }
-        }
+    override fun onDestroyView() {
+        userList.adapter = null
+        super.onDestroyView()
     }
 
     companion object {

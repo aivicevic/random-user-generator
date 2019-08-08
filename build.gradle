@@ -1,11 +1,11 @@
 buildscript {
-    ext.kotlinVersion = '1.3.21'
+    ext.kotlinVersion = '1.3.41'
     repositories {
         google()
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.4.0'
+        classpath 'com.android.tools.build:gradle:3.4.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
     }
 }
@@ -14,6 +14,7 @@ allprojects {
     repositories {
         google()
         jcenter()
+        mavenCentral()
     }
 }
 
@@ -58,7 +59,7 @@ ext {
      * Third-Party Versions
      ***********************/
     // Support
-    materialVersion = '1.1.0-alpha06'
+    materialVersion = '1.1.0-alpha09'
 
     // Dependency Injection
     daggerVersion = '2.16'
