@@ -1,47 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.home.HomeActivity">
 
-    <include layout="@layout/app_bar"/>
+    <include layout="@layout/app_bar" />
 
     <Button
         android:id="@+id/fetchUserButton"
+        style="@style/standard_button"
         android:layout_width="@dimen/home_button_width"
         android:layout_height="wrap_content"
         android:text="@string/fetch_user"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/fetchUsersButton"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintVertical_chainStyle="packed"
-        style="@style/standard_button"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed" />
 
     <Button
         android:id="@+id/fetchUsersButton"
+        style="@style/standard_button"
         android:layout_width="@dimen/home_button_width"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/standard_spacing"
         android:text="@string/fetch_user_list"
         app:layout_constraintBottom_toTopOf="@+id/favoritesButton"
-        app:layout_constraintTop_toBottomOf="@+id/fetchUserButton"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        style="@style/standard_button"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fetchUserButton" />
 
     <Button
         android:id="@+id/favoritesButton"
+        style="@style/standard_button"
         android:layout_width="@dimen/home_button_width"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/standard_spacing"
         android:text="@string/favorites"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fetchUsersButton"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        style="@style/standard_button"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fetchUsersButton" />
 </androidx.constraintlayout.widget.ConstraintLayout>

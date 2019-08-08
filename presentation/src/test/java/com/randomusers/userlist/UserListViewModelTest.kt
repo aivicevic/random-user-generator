@@ -72,6 +72,39 @@ class UserListViewModelTest {
     }
 
     @Test
+    fun `Restoring user list updates corresponding live data with existing user list (data exists)`() {
+        val mockUserResponseObserver: Observer<Response<UsersResponse>> = mock()
+        val fakeUserList = listOf(getFakeUser(), getFakeUser())
+        val mockUsersResponse = UsersResponse(fakeUserList)
+
+        userListViewModel.run {
+            usersResponseLiveData.value = Response.success(mockUsersResponse)
+            usersResponseLiveData.observeForever(mockUserResponseObserver)
+            restoreUserList()
+        }
+
+        verify(mockUserResponseObserver, times(2)).onChanged(any())
+        assert(userListViewModel.usersResponseLiveData.value?.run {
+            status == Status.SUCCESS && data?.results == fakeUserList
+        } ?: false)
+    }
+
+    @Test
+    fun `Restoring user list updates corresponding live data with empty user list (data does not exist)`() {
+        val mockUserResponseObserver: Observer<Response<UsersResponse>> = mock()
+
+        userListViewModel.run {
+            usersResponseLiveData.observeForever(mockUserResponseObserver)
+            restoreUserList()
+        }
+
+        verify(mockUserResponseObserver).onChanged(any())
+        assert(userListViewModel.usersResponseLiveData.value?.run {
+            status == Status.SUCCESS && data?.results?.isEmpty() ?: false
+        } ?: false)
+    }
+
+    @Test
     fun `Toggling favorite when 'isFavorite' is false adds user to local db via userRepository`() {
         val fakeUser: User = getFakeUser(isFavorite = false)
 
@@ -88,12 +121,26 @@ class UserListViewModelTest {
     }
 
     @Test
+    fun `Toggling favorite when 'isFavorite' is true updates user list live data`() {
+        val mockUserResponseObserver: Observer<Response<UsersResponse>> = mock()
+        val fakeUser: User = getFakeUser(isFavorite = true)
+
+        userListViewModel.run {
+            usersResponseLiveData.value = Response.success(UsersResponse(listOf(fakeUser)))
+            usersResponseLiveData.observeForever(mockUserResponseObserver)
+            toggleFavorite(fakeUser)
+        }
+
+        verify(mockUserResponseObserver, times(2)).onChanged(any())
+    }
+
+    @Test
     fun `Favorites list is populated from local db via userRepository`() {
         val mockFavoritesLiveData: MutableLiveData<List<User>> = mock()
 
         whenever(userRepository.getFavoritesFromDb()) doReturn mockFavoritesLiveData
 
-        userListViewModel.initFavoritesList()
-        verify(userRepository).getFavoritesFromDb()
+        userListViewModel.reinitializeFavoritesList()
+        verify(userRepository, atLeastOnce()).getFavoritesFromDb()
     }
 }

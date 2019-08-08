@@ -1,6 +1,5 @@
 package com.randomusers.ui.userlist
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.domain.Response
 import com.domain.model.user.User
@@ -8,6 +7,7 @@ import com.domain.model.user.UsersResponse
 import com.domain.repository.UserRepository
 import com.domain.scheduler.SchedulerProvider
 import com.randomusers.common.BaseViewModel
+import org.jetbrains.annotations.TestOnly
 import javax.inject.Inject
 
 class UserListViewModel @Inject constructor(
@@ -16,13 +16,11 @@ class UserListViewModel @Inject constructor(
 ) : BaseViewModel() {
 
     val usersResponseLiveData = MutableLiveData<Response<UsersResponse>>()
+    var favoriteUsersLiveData = userRepository.getFavoritesFromDb()
 
-    lateinit var favoriteUsersLiveData: LiveData<List<User>>
-
-    fun initFavoritesList() {
-        if (!::favoriteUsersLiveData.isInitialized) {
-            favoriteUsersLiveData = userRepository.getFavoritesFromDb()
-        }
+    @TestOnly
+    fun reinitializeFavoritesList() {
+        favoriteUsersLiveData = userRepository.getFavoritesFromDb()
     }
 
     fun updateUserList() {
@@ -46,8 +44,10 @@ class UserListViewModel @Inject constructor(
     }
 
     fun restoreUserList() {
-        // TODO: Add necessary logic
+        usersResponseLiveData.value = Response.success(UsersResponse(obtainCurrentUserList()))
     }
+
+    private fun obtainCurrentUserList() = usersResponseLiveData.value?.data?.results ?: emptyList()
 
     fun toggleFavorite(user: User) {
         user.isFavorite = !user.isFavorite
@@ -55,6 +55,19 @@ class UserListViewModel @Inject constructor(
             userRepository.saveFavoriteToDb(user)
         } else {
             userRepository.deleteFavoriteFromDb(user)
+            refreshUserListFavoritesState(user)
+        }
+    }
+
+    private fun refreshUserListFavoritesState(modifiedUser: User) {
+        // TODO: Run this on BG thread or co-routine?
+        val userList = obtainCurrentUserList().toMutableList()
+        userList.forEachIndexed { index, user ->
+            if (user.id.value == modifiedUser.id.value) {
+                userList[index] = modifiedUser
+                usersResponseLiveData.value = Response.success(UsersResponse(userList))
+                return@forEachIndexed
+            }
         }
     }
 }

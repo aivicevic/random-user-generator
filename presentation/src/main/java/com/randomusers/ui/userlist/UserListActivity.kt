@@ -36,6 +36,17 @@ class UserListActivity : BaseActivity(), UserListListener {
         initViewModels()
     }
 
+    private fun processIncomingIntent() {
+        if (null != intent && null != intent.extras) {
+            shouldOpenFavorites = intent!!.extras!!.getBoolean(KEY_SHOULD_OPEN_FAVORITES, false)
+        }
+    }
+
+    private fun initViewModels() {
+        userListViewModel =
+            ViewModelProviders.of(this, viewModelFactory).get(UserListViewModel::class.java)
+    }
+
     override fun initUI() {
         tabLayout.setupWithViewPager(viewPager.apply {
             swipeEnabled = false
@@ -57,6 +68,11 @@ class UserListActivity : BaseActivity(), UserListListener {
         showFavoriteToast(user.isFavorite)
     }
 
+    private fun showFavoriteToast(favoriteSaved: Boolean) {
+        val message = if (favoriteSaved) R.string.favorite_saved else R.string.favorite_removed
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+
     override fun showError(@StringRes errorMessage: Int) {
         errorSnackbar = Snackbar.make(content, errorMessage, Snackbar.LENGTH_LONG)
         errorSnackbar?.show()
@@ -66,30 +82,14 @@ class UserListActivity : BaseActivity(), UserListListener {
         errorSnackbar?.dismiss()
     }
 
-    private fun processIncomingIntent() {
-        if (null != intent && null != intent.extras) {
-            shouldOpenFavorites = intent!!.extras!!.getBoolean(KEY_SHOULD_OPEN_FAVORITES, false)
-        }
-    }
-
-    private fun initViewModels() {
-        userListViewModel =
-                ViewModelProviders.of(this, viewModelFactory).get(UserListViewModel::class.java)
-    }
-
-    private fun showFavoriteToast(favoriteSaved: Boolean) {
-        val message = if (favoriteSaved) R.string.favorite_saved else R.string.favorite_removed
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-    }
-
     companion object {
 
         private const val KEY_SHOULD_OPEN_FAVORITES = "KEY_SHOULD_OPEN_FAVORITES"
 
-        fun getStartingIntent(context: Context, openFavoritesList: Boolean): Intent {
+        fun getStartingIntent(context: Context, shouldOpenFavorites: Boolean): Intent {
             return Intent(context, UserListActivity::class.java).apply {
                 putExtras(Bundle().apply {
-                    putBoolean(KEY_SHOULD_OPEN_FAVORITES, openFavoritesList)
+                    putBoolean(KEY_SHOULD_OPEN_FAVORITES, shouldOpenFavorites)
                 })
             }
         }

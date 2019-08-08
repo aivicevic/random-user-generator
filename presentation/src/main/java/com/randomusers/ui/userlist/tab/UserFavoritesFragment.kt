@@ -24,12 +24,6 @@ class UserFavoritesFragment : ViewLifecycleFragment() {
     private var userListListener: UserListListener? = null
     private var userListViewModel: UserListViewModel? = null
 
-    private val favoriteUsersObserver = Observer<List<User>> { favorites ->
-        favorites?.run {
-            processFavorites(this)
-        }
-    }
-
     override fun onAttach(context: Context) {
         super.onAttach(context)
 
@@ -44,34 +38,34 @@ class UserFavoritesFragment : ViewLifecycleFragment() {
         initViewModels()
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? =
-        inflater.inflate(R.layout.fragment_user_list, container, false)
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        initUI()
-    }
-
-    override fun onDestroyView() {
-        userList.adapter = null
-        super.onDestroyView()
-    }
-
     private fun initViewModels() {
         activity?.run {
             userListViewModel = ViewModelProviders.of(this).get(UserListViewModel::class.java)
         }
 
-        userListViewModel?.run {
-            initFavoritesList()
-            favoriteUsersLiveData.observe(
-                viewLifecycleOwner ?: this@UserFavoritesFragment, favoriteUsersObserver
-            )
-        }
+        userListViewModel?.favoriteUsersLiveData?.observe(
+            viewLifecycleOwner ?: this@UserFavoritesFragment, Observer<List<User>> { favorites ->
+                favorites?.run {
+                    processFavorites(this)
+                }
+            }
+        )
+    }
+
+    private fun processFavorites(users: List<User>) {
+        userListListener?.hideError()
+        userListAdapter.submitList(users.reversed())
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? = inflater.inflate(R.layout.fragment_user_list, container, false)
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initUI()
     }
 
     private fun initUI() {
@@ -85,9 +79,9 @@ class UserFavoritesFragment : ViewLifecycleFragment() {
         swipeRefresh.isEnabled = false
     }
 
-    private fun processFavorites(users: List<User>) {
-        userListListener?.hideError()
-        userListAdapter.updateUserList(users)
+    override fun onDestroyView() {
+        userList.adapter = null
+        super.onDestroyView()
     }
 
     companion object {
