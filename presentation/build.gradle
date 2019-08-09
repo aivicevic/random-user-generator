@@ -45,6 +45,7 @@ dependencies {
     implementation androidx.support.appCompat
     implementation androidx.support.constraintLayout
     implementation androidx.support.recyclerView
+    implementation androidx.support.swipeRefreshLayout
     implementation "com.google.android.material:material:$project.materialVersion"
 
     // Architecture Components
@@ -74,15 +75,13 @@ dependencies {
     // Glide
     implementation "com.github.bumptech.glide:glide:$project.glideVersion"
 
-    // Testing - TODO: Clean-up unnecessary dependencies when test coverage is complete
+    // Testing
     testImplementation androidx.testing.core
     testImplementation androidx.testing.coreArch
     testImplementation androidx.testing.rules
     testImplementation androidx.testing.jUnitExt
-    testImplementation androidx.testing.truthExt
     testImplementation testing.mockito
     testImplementation testing.mockitoKt
-    testImplementation testing.googleTruth
     androidTestImplementation androidx.testing.runner
     androidTestImplementation androidx.testing.espresso
     androidTestUtil androidx.testing.orchestrator

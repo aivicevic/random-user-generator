@@ -2,7 +2,6 @@ package com.randomusers.ui.userlist.tab
 
 import android.content.Context
 import android.os.Bundle
-import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,7 +12,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.domain.Response
 import com.domain.Status
-import com.domain.model.user.User
 import com.domain.model.user.UsersResponse
 import com.randomusers.R
 import com.randomusers.common.ViewLifecycleFragment

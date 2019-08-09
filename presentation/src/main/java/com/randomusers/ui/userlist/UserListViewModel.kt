@@ -60,7 +60,6 @@ class UserListViewModel @Inject constructor(
     }
 
     private fun refreshUserListFavoritesState(modifiedUser: User) {
-        // TODO: Run this on BG thread or co-routine?
         val userList = obtainCurrentUserList().toMutableList()
         userList.forEachIndexed { index, user ->
             if (user.id.value == modifiedUser.id.value) {

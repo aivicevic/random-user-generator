@@ -6,7 +6,6 @@ import dagger.Component
 import dagger.android.support.AndroidSupportInjectionModule
 import javax.inject.Singleton
 
-// TODO: Clean up DI components (more modular)
 @Singleton
 @Component(
     modules = [

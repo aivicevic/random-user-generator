@@ -4,8 +4,8 @@ enum class Status {
     LOADING, SUCCESS, ERROR
 }
 
-// TODO: Consider moving away from this and simply using observable streams
 class Response<T>(val status: Status, val data: T?, val throwable: Throwable?) {
+
     companion object {
 
         fun <T> loading(): Response<T> = Response(Status.LOADING, null, null)
