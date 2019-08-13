@@ -54,7 +54,10 @@ dependencies {
     kapt(ProjectConfig.Libs.Dagger.compiler)
 
     // LifeCycle Components
-    implementation(ProjectConfig.Libs.AndroidX.LifeCycle.extensions)
+    implementation(ProjectConfig.Libs.AndroidX.LifeCycle.liveData)
+
+    // Coroutines
+    implementation(ProjectConfig.Libs.Coroutines.core)
 
     // Network
     implementation(ProjectConfig.Libs.Network.Retrofit.retrofit)

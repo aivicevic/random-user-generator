@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -40,7 +40,7 @@ class UserFavoritesFragment : ViewLifecycleFragment() {
 
     private fun initViewModels() {
         activity?.run {
-            userListViewModel = ViewModelProviders.of(this).get(UserListViewModel::class.java)
+            userListViewModel = ViewModelProvider(this).get(UserListViewModel::class.java)
         }
 
         userListViewModel?.favoriteUsersLiveData?.observe(
