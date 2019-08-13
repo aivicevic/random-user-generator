@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import com.domain.model.user.User
 import com.google.android.material.snackbar.Snackbar
 import com.randomusers.R
@@ -44,7 +43,7 @@ class UserListActivity : BaseActivity(), UserListListener {
 
     private fun initViewModels() {
         userListViewModel =
-            ViewModelProviders.of(this, viewModelFactory).get(UserListViewModel::class.java)
+            ViewModelProvider(this, viewModelFactory).get(UserListViewModel::class.java)
     }
 
     override fun initUI() {

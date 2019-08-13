@@ -52,8 +52,8 @@ dependencies {
     implementation(ProjectConfig.Libs.AndroidX.Support.swipeRefreshLayout)
 
     // LifeCycle Components
-    implementation(ProjectConfig.Libs.AndroidX.LifeCycle.runtime)
-    implementation(ProjectConfig.Libs.AndroidX.LifeCycle.extensions)
+    implementation(ProjectConfig.Libs.AndroidX.LifeCycle.viewModelKtx)
+    implementation(ProjectConfig.Libs.AndroidX.LifeCycle.liveData)
     kapt(ProjectConfig.Libs.AndroidX.LifeCycle.compiler)
 
     // Room
@@ -68,9 +68,9 @@ dependencies {
     implementation(ProjectConfig.Libs.Dagger.androidSupport)
     kapt(ProjectConfig.Libs.Dagger.androidProcessor)
 
-    // RxJava
-    implementation(ProjectConfig.Libs.Rx.rxJava)
-    implementation(ProjectConfig.Libs.Rx.rxAndroid)
+    // Coroutines
+    implementation(ProjectConfig.Libs.Coroutines.core)
+    implementation(ProjectConfig.Libs.Coroutines.android)
 
     // Network
     implementation(ProjectConfig.Libs.Network.Retrofit.retrofit)

@@ -1,22 +1,30 @@
 package com.randomusers.ui.userlist
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.domain.Response
 import com.domain.model.user.User
 import com.domain.model.user.UsersResponse
 import com.domain.repository.UserRepository
-import com.domain.scheduler.SchedulerProvider
-import com.randomusers.common.BaseViewModel
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.jetbrains.annotations.TestOnly
 import javax.inject.Inject
 
 class UserListViewModel @Inject constructor(
-    private val schedulerProvider: SchedulerProvider,
     private val userRepository: UserRepository
-) : BaseViewModel() {
+) : ViewModel() {
 
     val usersResponseLiveData = MutableLiveData<Response<UsersResponse>>()
-    var favoriteUsersLiveData = userRepository.getFavoritesFromDb()
+    var favoriteUsersLiveData: LiveData<List<User>>
+
+    init {
+        favoriteUsersLiveData = userRepository.getFavoritesFromDb()
+    }
 
     @TestOnly
     fun reinitializeFavoritesList() {
@@ -24,15 +32,15 @@ class UserListViewModel @Inject constructor(
     }
 
     fun updateUserList() {
-        addDisposable(userRepository.getUsers(100)
-            .compose(applySchedulersSingle(schedulerProvider))
-            .doOnSubscribe { onLoadUserList() }
-            .subscribe(::onRetrieveUserListSuccess, ::onRetrieveUserListError)
-        )
+        usersResponseLiveData.value = Response.loading()
+        viewModelScope.launch(userListExceptionHandler) {
+            val response = userRepository.getUsers()
+            onRetrieveUserListSuccess(response)
+        }
     }
 
-    private fun onLoadUserList() {
-        usersResponseLiveData.value = Response.loading()
+    private val userListExceptionHandler = CoroutineExceptionHandler { _, throwable ->
+        onRetrieveUserListError(throwable)
     }
 
     private fun onRetrieveUserListSuccess(usersResponse: UsersResponse) {
@@ -51,21 +59,31 @@ class UserListViewModel @Inject constructor(
 
     fun toggleFavorite(user: User) {
         user.isFavorite = !user.isFavorite
-        if (user.isFavorite) {
-            userRepository.saveFavoriteToDb(user)
-        } else {
-            userRepository.deleteFavoriteFromDb(user)
-            refreshUserListFavoritesState(user)
+        viewModelScope.launch(favoriteUsersExceptionHandler) {
+            if (user.isFavorite) {
+                userRepository.saveFavoriteToDb(user)
+            } else {
+                userRepository.deleteFavoriteFromDb(user)
+                refreshUserListFavoritesState(user)
+            }
         }
     }
 
-    private fun refreshUserListFavoritesState(modifiedUser: User) {
-        val userList = obtainCurrentUserList().toMutableList()
-        userList.forEachIndexed { index, user ->
-            if (user.id.value == modifiedUser.id.value) {
-                userList[index] = modifiedUser
-                usersResponseLiveData.value = Response.success(UsersResponse(userList))
-                return@forEachIndexed
+    private val favoriteUsersExceptionHandler = CoroutineExceptionHandler { _, _ ->
+        // TODO: Add some indication to user that something went wrong
+    }
+
+    private suspend fun refreshUserListFavoritesState(modifiedUser: User) {
+        withContext(Dispatchers.Default) {
+            val userList = obtainCurrentUserList().toMutableList()
+            userList.forEachIndexed { index, user ->
+                if (user.id.value == modifiedUser.id.value) {
+                    userList[index] = modifiedUser
+                    withContext(Dispatchers.Main) {
+                        usersResponseLiveData.value = Response.success(UsersResponse(userList))
+                    }
+                    return@forEachIndexed
+                }
             }
         }
     }

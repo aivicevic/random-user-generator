@@ -43,11 +43,7 @@ dependencies {
     implementation(ProjectConfig.Libs.kotlinStd)
 
     // LifeCycle Components
-    implementation(ProjectConfig.Libs.AndroidX.LifeCycle.extensions)
-
-    // RxJava
-    implementation(ProjectConfig.Libs.Rx.rxJava)
-    implementation(ProjectConfig.Libs.Rx.rxAndroid)
+    implementation(ProjectConfig.Libs.AndroidX.LifeCycle.liveData)
 
     // Room
     implementation(ProjectConfig.Libs.AndroidX.Room.runtime)

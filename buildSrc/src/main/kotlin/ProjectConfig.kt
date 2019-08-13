@@ -19,9 +19,9 @@ private const val roomVersion = "2.0.0"
 // Other
 private const val materialVersion = "1.1.0-alpha07"
 private const val daggerVersion = "2.16"
-private const val rxJavaVersion = "2.1.15"
-private const val rxAndroidVersion = "2.0.2"
-private const val retrofitVersion = "2.4.0"
+private const val kotlinCoroutinesCoreVersion = "1.3.0-RC2"
+private const val kotlinCoroutinesAndroidVersion = "1.0.0"
+private const val retrofitVersion = "2.6.1"
 private const val okHttpVersion = "3.11.0"
 private const val glideVersion = "4.2.0"
 
@@ -55,7 +55,7 @@ object ProjectConfig {
         const val minSdkVersion = 21
         const val targetSdkVersion = 28
         const val compileSdkVersion = 28
-        const val applicationId = "com.blink.neptunesprideassistant"
+        const val applicationId = "com.blink.randomusers"
         const val versionCode = 1
         const val versionName = "0.1"
     }
@@ -83,8 +83,9 @@ object ProjectConfig {
 
             object LifeCycle {
 
-                const val runtime = "androidx.lifecycle:lifecycle-runtime:$lifeCycleVersion"
-                const val extensions = "androidx.lifecycle:lifecycle-extensions:$lifeCycleVersion"
+                const val viewModelKtx =
+                    "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifeCycleVersion"
+                const val liveData = "androidx.lifecycle:lifecycle-livedata:$lifeCycleVersion"
                 const val compiler = "androidx.lifecycle:lifecycle-compiler:$lifeCycleVersion"
             }
 
@@ -105,10 +106,12 @@ object ProjectConfig {
             const val androidProcessor = "com.google.dagger:dagger-android-processor:$daggerVersion"
         }
 
-        object Rx {
+        object Coroutines {
 
-            const val rxJava = "io.reactivex.rxjava2:rxjava:$rxJavaVersion"
-            const val rxAndroid = "io.reactivex.rxjava2:rxandroid:$rxAndroidVersion"
+            const val core =
+                "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinCoroutinesCoreVersion"
+            const val android =
+                "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlinCoroutinesAndroidVersion"
         }
 
         object Network {
