@@ -20,14 +20,11 @@ class UserListViewModel @Inject constructor(
 ) : ViewModel() {
 
     val usersResponseLiveData = MutableLiveData<Response<UsersResponse>>()
+    val toggleFavoriteStatusLiveData = MutableLiveData<ToggleFavoriteStatus>()
     var favoriteUsersLiveData: LiveData<List<User>>
 
     init {
-        favoriteUsersLiveData = userRepository.getFavoritesFromDb()
-    }
-
-    @TestOnly
-    fun reinitializeFavoritesList() {
+        toggleFavoriteStatusLiveData.value = ToggleFavoriteStatus.enabled()
         favoriteUsersLiveData = userRepository.getFavoritesFromDb()
     }
 
@@ -35,19 +32,11 @@ class UserListViewModel @Inject constructor(
         usersResponseLiveData.value = Response.loading()
         viewModelScope.launch(userListExceptionHandler) {
             val response = userRepository.getUsers()
-            onRetrieveUserListSuccess(response)
+            usersResponseLiveData.value = Response.success(response)
         }
     }
 
     private val userListExceptionHandler = CoroutineExceptionHandler { _, throwable ->
-        onRetrieveUserListError(throwable)
-    }
-
-    private fun onRetrieveUserListSuccess(usersResponse: UsersResponse) {
-        usersResponseLiveData.value = Response.success(usersResponse)
-    }
-
-    private fun onRetrieveUserListError(throwable: Throwable) {
         usersResponseLiveData.value = Response.error(throwable)
     }
 
@@ -57,20 +46,29 @@ class UserListViewModel @Inject constructor(
 
     private fun obtainCurrentUserList() = usersResponseLiveData.value?.data?.results ?: emptyList()
 
-    fun toggleFavorite(user: User) {
-        user.isFavorite = !user.isFavorite
-        viewModelScope.launch(favoriteUsersExceptionHandler) {
+    @TestOnly
+    fun reinitializeFavoritesList() {
+        favoriteUsersLiveData = userRepository.getFavoritesFromDb()
+    }
+
+    fun toggleFavorite(user: User, isFavoritesListSelected: Boolean = false) {
+        user.isFavorite = !user.isFavorite  // TODO: Potential bug here if an exception occurs
+        viewModelScope.launch(toggleFavoriteExceptionHandler) {
+            toggleFavoriteStatusLiveData.value = ToggleFavoriteStatus.disabled()
             if (user.isFavorite) {
                 userRepository.saveFavoriteToDb(user)
             } else {
                 userRepository.deleteFavoriteFromDb(user)
-                refreshUserListFavoritesState(user)
+                if (isFavoritesListSelected) {
+                    refreshUserListFavoritesState(user)
+                }
             }
+            toggleFavoriteStatusLiveData.value = ToggleFavoriteStatus.enabled()
         }
     }
 
-    private val favoriteUsersExceptionHandler = CoroutineExceptionHandler { _, _ ->
-        // TODO: Add some indication to user that something went wrong
+    private val toggleFavoriteExceptionHandler = CoroutineExceptionHandler { _, _ ->
+        toggleFavoriteStatusLiveData.value = ToggleFavoriteStatus.error()
     }
 
     private suspend fun refreshUserListFavoritesState(modifiedUser: User) {

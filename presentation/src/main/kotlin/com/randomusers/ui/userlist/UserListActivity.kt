@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.annotation.StringRes
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.domain.model.user.User
 import com.google.android.material.snackbar.Snackbar
@@ -20,11 +21,12 @@ import javax.inject.Inject
 class UserListActivity : BaseActivity(), UserListListener {
 
     @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
-    @Inject lateinit var userListViewModel: UserListViewModel
+    private lateinit var userListViewModel: UserListViewModel
 
     private val userListPagerAdapter = UserListPagerAdapter(supportFragmentManager)
     private var errorSnackbar: Snackbar? = null
     private var shouldOpenFavorites: Boolean = false
+    private var isToggleFavoriteEnabled: Boolean = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
@@ -36,14 +38,25 @@ class UserListActivity : BaseActivity(), UserListListener {
     }
 
     private fun processIncomingIntent() {
-        if (null != intent && null != intent.extras) {
-            shouldOpenFavorites = intent!!.extras!!.getBoolean(KEY_SHOULD_OPEN_FAVORITES, false)
-        }
+        shouldOpenFavorites = intent?.extras?.getBoolean(KEY_SHOULD_OPEN_FAVORITES, false) ?: false
     }
 
     private fun initViewModels() {
         userListViewModel =
             ViewModelProvider(this, viewModelFactory).get(UserListViewModel::class.java)
+
+        userListViewModel.toggleFavoriteStatusLiveData.observe(this, Observer { status ->
+            status?.run {
+                processToggleFavoriteStatus(this)
+            }
+        })
+    }
+
+    private fun processToggleFavoriteStatus(status: ToggleFavoriteStatus) {
+        if (status.hasError) {
+            showError(R.string.error)
+        }
+        isToggleFavoriteEnabled = status.isEnabled
     }
 
     override fun initUI() {
@@ -63,8 +76,11 @@ class UserListActivity : BaseActivity(), UserListListener {
     }
 
     override fun toggleFavorite(user: User) {
-        userListViewModel.toggleFavorite(user)
-        showFavoriteToast(user.isFavorite)
+        if (isToggleFavoriteEnabled) {
+            val isFavoritesListSelected = viewPager.currentItem == 1
+            userListViewModel.toggleFavorite(user, isFavoritesListSelected)
+            showFavoriteToast(user.isFavorite)
+        }
     }
 
     private fun showFavoriteToast(favoriteSaved: Boolean) {

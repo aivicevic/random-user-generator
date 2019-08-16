@@ -1,11 +1,6 @@
 package com.randomusers
 
 import com.domain.model.user.*
-import com.domain.scheduler.SchedulerProvider
-
-fun triggerScheduledActions(schedulerProvider: SchedulerProvider) {
-    (schedulerProvider as? TestSchedulerProviderImpl)?.triggerActions()
-}
 
 fun getFakeUser(isFavorite: Boolean = false): User {
     return User(

@@ -2,6 +2,7 @@
 <resources>
     <string name="app_name">Random User Generator</string>
 
+    <!-- Home -->
     <string name="home">Home</string>
     <string name="fetch_user">Fetch User</string>
     <string name="fetch_user_list">Fetch User List</string>
@@ -21,4 +22,7 @@
     <string formatted="false" name="user_email">Email: %s</string>
     <string formatted="false" name="user_home_phone">Home: %s</string>
     <string formatted="false" name="user_mobile_phone">Mobile: %s</string>
+
+    <!-- Misc. -->
+    <string name="error">Oops! An error occurred. Please try again.</string>
 </resources>
