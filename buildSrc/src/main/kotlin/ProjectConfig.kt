@@ -150,5 +150,6 @@ object ProjectConfig {
 
         const val mockito = "org.mockito:mockito-core:$mockitoVersion"
         const val mockitoKt = "com.nhaarman.mockitokotlin2:mockito-kotlin:$mockitoKtVersion"
+        const val coroutinesTest = "org.jetbrains.kotlinx:kotlinx-coroutines-test:$kotlinCoroutinesCoreVersion"
     }
 }

@@ -90,6 +90,7 @@ dependencies {
     testImplementation(ProjectConfig.TestLibs.AndroidX.jUnitExt)
     testImplementation(ProjectConfig.TestLibs.mockito)
     testImplementation(ProjectConfig.TestLibs.mockitoKt)
+    testImplementation(ProjectConfig.TestLibs.coroutinesTest)
     androidTestImplementation(ProjectConfig.TestLibs.AndroidX.runner)
     androidTestImplementation(ProjectConfig.TestLibs.AndroidX.espresso)
     androidTestUtil(ProjectConfig.TestLibs.AndroidX.orchestrator)
