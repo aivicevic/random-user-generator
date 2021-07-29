@@ -1,0 +1,22 @@
+name: Pull Request Setup
+on: 
+  pull_request:
+    types: [opened, ready_for_review, labeled, unlabeled, opened, edited, synchronize]
+jobs:
+  add-reviews:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.pull_request.opened == 'true' || github.event.pull_request.ready_for_review == 'true' }}
+    steps:
+      - uses: kentaro-m/auto-assign-action@v1.2.0
+        with:
+          configuration-path: ".github/pr_auto_assign_config.yml"
+  enforce-label:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.pull_request.opened == 'true' || github.event.pull_request.labeled == 'true' || github.event.pull_request.unlabeled == 'true' || github.event.pull_request.edited == 'true' || github.event.pull_request.synchronize == 'true' }}
+    steps:
+      - uses: yogevbd/enforce-label-action@2.2.2
+        with:
+          REQUIRED_LABELS_ANY: "enhancement,architecture,bug,documentation"
+          REQUIRED_LABELS_ANY_DESCRIPTION: "Select at least one label [enhancement, architecture, bug, documentation]"
+          BANNED_LABELS: "duplicate,invalid,question,wontfix"
+          BANNED_LABELS_DESCRIPTION: "The [duplicate, invalid, question, wontfix] labels are banned"
