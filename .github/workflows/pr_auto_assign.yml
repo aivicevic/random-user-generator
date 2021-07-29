@@ -9,7 +9,7 @@ jobs:
     steps:
       - uses: kentaro-m/auto-assign-action@v1.2.0
         with:
-          configuration-path: ".github/pr_auto_assign_config.yml"
+          configuration-path: ".github/workflows/configs/pr_auto_assign_config.yml"
   enforce-label:
     runs-on: ubuntu-latest
     if: ${{ github.event.action == 'opened' || github.event.action == 'labeled' || github.event.action == 'unlabeled' || github.event.action == 'edited' || github.event.action == 'synchronize' }}
