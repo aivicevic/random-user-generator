@@ -1,0 +1,7 @@
+name: Pull Request Assignee
+on: [pull_request]
+jobs:
+  pr_assignee:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: augustohp/action-pr-assignee@1.0.1
