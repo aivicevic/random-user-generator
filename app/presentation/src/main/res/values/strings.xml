@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- User List -->
+    <string name="user_list_tab_list">User List</string>
+    <string name="user_list_tab_favorites">Favorites</string>
+    <string name="user_list_load_error">Unable to retrieve users. Please try again.</string>
+    <string name="user_list_profile_desc">User Profile Photo</string>
+    <string name="user_list_favorite_saved">Favorite saved</string>
+    <string name="user_list_favorite_removed">Favorite removed</string>
+
+    <!-- User Details -->
+    <string name="user_details_name_label">Name:</string>
+    <string name="user_details_dob_label">Date of Birth:</string>
+    <string name="user_details_location_label">Location:</string>
+    <string name="user_details_email_label">Email:</string>
+    <string name="user_details_phone_label">Phone:</string>
+    <string name="user_details_menu_action_favorite">Favorite</string>
+
+    <!-- User -->
+    <string formatted="false" name="user_full_name">%s %s</string>
+    <string formatted="false" name="user_full_name_title">%s. %s %s</string>
+    <string formatted="false" name="user_city_state">%s, %s</string>
+    <string formatted="false" name="user_full_address">%s, %s, %s %s</string>
+    <string formatted="false" name="user_email">Email: %s</string>
+    <string formatted="false" name="user_mobile_phone">Mobile: %s</string>
+
+    <!-- Misc. -->
+    <string name="default_error">Oops! An error occurred. Please try again.</string>
+</resources>

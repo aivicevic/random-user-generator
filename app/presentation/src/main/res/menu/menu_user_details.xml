@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_favorite"
+        android:icon="@drawable/icon_favorite"
+        android:orderInCategory="100"
+        android:title="@string/user_details_menu_action_favorite"
+        app:showAsAction="always" />
+</menu>

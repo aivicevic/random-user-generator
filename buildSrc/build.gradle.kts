@@ -1,6 +1,6 @@
 // Used only to enable use of Config.kt values in other build scripts. DO NOT ADD ANY OTHER BUILD CODE HERE.
 repositories {
-    jcenter()
+    mavenCentral()
 }
 
 plugins {
