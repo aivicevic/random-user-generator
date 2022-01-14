@@ -1,20 +1,26 @@
 buildscript {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
     dependencies {
-        classpath(ProjectConfig.BuildPlugins.androidGradle)
-        classpath(ProjectConfig.BuildPlugins.kotlinGradlePlugin)
+        classpath(ProjectConfig.androidGradlePlugin)
+        classpath(ProjectConfig.kotlinGradlePlugin)
+        classpath(ProjectConfig.ktlintGradlePlugin)
+        classpath(ProjectConfig.navigationSafeArgsPlugin)
     }
 }
 
 allprojects {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
         mavenCentral()
     }
+}
+
+plugins {
+    id(ProjectConfig.ktlintPluginId) version Versions.ktlintVersion
 }
 
 tasks {
